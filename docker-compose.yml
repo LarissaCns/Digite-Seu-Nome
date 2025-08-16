@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # Serviço do Back-end
+  backend:
+    build: ./backend
+    container_name: backend_app
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  # Serviço do Front-end
+  frontend:
+    build: ./frontend
+    container_name: frontend_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend       # Back-end roda antes do front-end
