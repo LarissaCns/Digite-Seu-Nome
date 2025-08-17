@@ -1,7 +1,24 @@
 import React, { useState, useEffect } from 'react';
 
+import {
+  Box,
+  Heading,
+  HStack,
+  Text,
+  Input,
+  Button,
+  VStack,
+  Spinner,
+  Alert,
+  AlertIcon,
+  Image
+} from '@chakra-ui/react';
+
+import saudacaoGif from './assets/6bff8991c9308a10e5d2baef1153f5fe.gif';
+
 function App() {
   const [message, setMessage] = useState('');
+  const [nomes, setNomes] = useState([]);
 
   async function fetchNomes() {
     try {
@@ -10,6 +27,7 @@ function App() {
         throw new Error('Erro ao buscar nomes');
       }
       const data = await response.json();
+      setNomes(data.nomes);
       console.log(data.nomes);
     } catch (error) {
       console.error('Erro ao buscar nomes:', error);
@@ -37,28 +55,49 @@ function App() {
   }
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'sans-serif' }}>
-      <h1>Meu Projeto Full-Stack com Docker</h1>
-      <p style={{ fontSize: '1.2em', color: '#333' }}>
-        Digite seu nome:
-      </p>
-      <input
-        type="text"
-        placeholder="Seu nome"
-        style={{ padding: '10px', fontSize: '1em', width: '200px' }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            greetUser(e.target.value);
-            e.target.value = ''; // Limpa o campo após enviar
-          }
-        }}
-      />
-      <p style={{ marginTop: '20px', fontSize: '1.2em' }}>{message}</p>
-      <p>Nomes cadastrados:</p>
-      <button onClick={fetchNomes} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer' }}>
-        Buscar Nomes
-      </button>
-    </div>
+    <Box 
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minH="100vh"
+      bg="gray.50"
+    >
+      <VStack
+        spacing={5}
+        p={8}
+        bg="white"
+        borderRadius="lg"
+        boxShadow="lg"
+        width="80%"
+        height="80%"
+      >
+        <Text fontSize="2xl" fontWeight="bold" textAlign="center" color="gray.600">
+          Digite seu nome e pressione Enter para receber uma saudação personalizada!
+        </Text>
+        <HStack width="50%">
+          <Input 
+          placeholder="Seu nome" size="lg"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              greetUser(e.target.value);
+              e.target.value = '';
+            }
+          }}
+          />
+        </HStack>
+          {message ? 
+            <>
+              <Image src={saudacaoGif} alt="Saudação" boxSize="150px" />
+              <Text as="span" color="purple.400" fontWeight="bold" fontSize="2xl">
+                {message}
+              </Text>
+            </> 
+          : null}
+        <Button onClick={fetchNomes} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer' }}>
+          Nomes Cadastrados
+        </Button>
+      </VStack>
+    </Box>
   );
 }
 
