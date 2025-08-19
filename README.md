@@ -42,6 +42,8 @@ Olá [Nome da Pessoa]
 ---
 
 ## 📂 Estrutura do Projeto  
+
+```bash
 /projeto-fullstack
 │
 ├── backend
@@ -56,6 +58,7 @@ Olá [Nome da Pessoa]
 │
 ├── docker-compose.yml
 └── README.md
+```
 
 ## ▶️ Como Rodar o Projeto  
 
