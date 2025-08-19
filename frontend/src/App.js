@@ -19,20 +19,20 @@ import saudacaoGif from './assets/6bff8991c9308a10e5d2baef1153f5fe.gif';
 function App() {
   const [message, setMessage] = useState('');
   const [nomes, setNomes] = useState([]);
+  const [mostrarNomes, setMostrarNomes] = useState(false);
 
-  async function fetchNomes() {
-    try {
-      const response = await fetch('http://localhost:3001/recent');
-      if (!response.ok) {
-        throw new Error('Erro ao buscar nomes');
+  useEffect(() => {
+    if (mostrarNomes) {
+      try {
+        fetch('http://localhost:3001/recent')
+        .then((res) => res.json())
+        .then((data) => setNomes(data.nomes || []));
+      } catch (error) {
+        console.error('Erro ao buscar nomes:', error);
       }
-      const data = await response.json();
-      setNomes(data.nomes);
-      console.log(data.nomes);
-    } catch (error) {
-      console.error('Erro ao buscar nomes:', error);
+      
     }
-  }
+  }, [mostrarNomes]);
 
   async function greetUser(name) {
     try {
@@ -43,14 +43,19 @@ function App() {
         },
         body: JSON.stringify({ name }),
       });
-      if (!response.ok) {
-        throw new Error('Erro ao enviar saudação');
-      }
       const data = await response.json();
       setMessage(data.message);
-      console.log(data.message);
     } catch (error) {
       console.error('Erro ao enviar saudação:', error);
+    }
+  }
+
+  async function deleteUsers() {
+    try {
+      const response = await fetch('http://localhost:3001/clear');
+      setMostrarNomes(false);
+    } catch (error) {
+      console.error('Erro ao buscar nomes:', error);
     }
   }
 
@@ -60,18 +65,18 @@ function App() {
       alignItems="center"
       justifyContent="center"
       minH="100vh"
-      bg="gray.50"
+      bg="#211C23"
     >
       <VStack
         spacing={5}
         p={8}
-        bg="white"
+        bg="#F5F5D3"
         borderRadius="lg"
         boxShadow="lg"
-        width="80%"
-        height="80%"
+        width="70%"
+        height="90%"
       >
-        <Text fontSize="2xl" fontWeight="bold" textAlign="center" color="gray.600">
+        <Text fontSize="1xl" fontWeight="bold" textAlign="center" color="gray.600">
           Digite seu nome e pressione Enter para receber uma saudação personalizada!
         </Text>
         <HStack width="50%">
@@ -88,13 +93,34 @@ function App() {
           {message ? 
             <>
               <Image src={saudacaoGif} alt="Saudação" boxSize="150px" />
-              <Text as="span" color="purple.400" fontWeight="bold" fontSize="2xl">
+              <Text as="span" color="black.400" fontWeight="bold" fontSize="2xl">
                 {message}
               </Text>
             </> 
           : null}
-        <Button onClick={fetchNomes} style={{ padding: '10px 20px', fontSize: '1em', cursor: 'pointer' }}>
-          Nomes Cadastrados
+        <Button
+          colorScheme="teal"
+          onClick={() => setMostrarNomes(!mostrarNomes)}
+          width="20%"
+        >
+          {mostrarNomes ? 'Esconder Nomes' : 'Nomes Cadastrados'}
+        </Button>
+        {mostrarNomes && (
+          <Box mt={2} p={2} borderRadius="md" width="60%">
+            {nomes && nomes.length > 0 ? (
+              <Text fontSize="lg" color="teal.700" fontStyle="italic">
+                {'- ' + nomes.join(', ')}
+              </Text>
+            ) : (
+              <Text color="gray.500">Nenhum nome cadastrado ainda.</Text>
+            )}
+          </Box>
+        )}
+        <Button 
+          onClick={deleteUsers} 
+          colorScheme="teal"
+          width="20%">
+          Excluir Nomes
         </Button>
       </VStack>
     </Box>
