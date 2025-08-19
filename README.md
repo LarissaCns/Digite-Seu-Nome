@@ -44,7 +44,7 @@ Olá [Nome da Pessoa]
 ## 📂 Estrutura do Projeto  
 
 ```bash
-/projeto-fullstack
+/Digite-Seu-Nome
 │
 ├── backend
 │ ├── package.json
