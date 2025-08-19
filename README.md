@@ -3,6 +3,8 @@
 Este é um projeto **Fullstack** desenvolvido com **Node.js + Express** no back-end e **React + Chakra UI** no front-end.  
 Toda a aplicação roda em **containers Docker**, garantindo portabilidade e fácil execução.  
 
+![Preview da Aplicação](./screenshot.png)
+
 ---
 
 ## 📌 Funcionalidades  
